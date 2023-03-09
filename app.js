@@ -8,7 +8,7 @@ const mongoose = require("mongoose")
 const session = require("express-session")
 const passport = require("passport")
 const passportLocalMongoose = require("passport-local-mongoose")
-const slatRound = 12;
+
 
 
 const app = express()
@@ -61,7 +61,12 @@ app.route("/login")
     .get(function (req, res) {
         res.render('login')
     })
-    .post(function (req, res) {
+    .post(passport.authenticate('local', {
+        successRedirect: '/secrets',
+        failureRedirect: '/login',
+
+    }), function (req, res) {
+
 
     })
 
@@ -84,7 +89,13 @@ app.route("/register")
     })
 
 
+app.get("/logout", function (req, res, next) {
+    req.logout(function (err) {
+        if (err) { return next(err) }
+        res.redirect("/")
+    })
 
+})
 
 
 
